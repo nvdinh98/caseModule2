@@ -12,24 +12,26 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class LibraryCardMenu {
-    final static Scanner scanner = new Scanner(System.in); //String
-    final static Scanner scanner1 = new Scanner(System.in); //int
-    LibraryCardManager managerLibraryCard = LibraryCardManager.getInstance();
+    final static Scanner scanner = new Scanner(System.in);
+    final static Scanner scanner1 = new Scanner(System.in);
+    LibraryCardManager libraryCardManager = LibraryCardManager.getInstance();
     BookManager managerBook = BookManager.getInstance();
 
+    //khỏi tạo singleton để tránh tạo ra một đối tượng mới khi chạy .
     private LibraryCardMenu() {
     }
 
     public static LibraryCardMenu getInstance() {
-        return LibraryCardMenu.LibraryCardMenuWithManagerLibraryCardHelper.INSTANCE;
+        return LibraryCardMenuHelper.INSTANCE;
     }
 
-    private static class LibraryCardMenuWithManagerLibraryCardHelper{
+    private static class LibraryCardMenuHelper {
         private static final LibraryCardMenu INSTANCE = new LibraryCardMenu();
     }
+
     public void runLibraryCard() {
         try {
-            managerLibraryCard.setLibraryCardArrayList(LibraryCardFile.getInstance().readFile());
+            libraryCardManager.setLibraryCardArrayList(LibraryCardFile.getInstance().readFile());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -48,21 +50,23 @@ public class LibraryCardMenu {
             System.out.println("5. Mượn sách");
             System.out.println("6. Trả sách");
             System.out.println("0. Quay lại");
+            System.out.println("----------------図書館--------------");
+
 
             choice = number.nextInt();
 
             switch (choice) {
                 case 1:
-                    addLibraryCard(managerLibraryCard);
+                    libraryCardManager.addLibraryCard(inputCode());
                     break;
                 case 2:
-                    removeLibraryCard(managerLibraryCard);
+                    removeLibraryCard(libraryCardManager);
                     break;
                 case 3:
                     searchCard();
                     break;
                 case 4:
-                    managerLibraryCard.showAllLibraryCard();
+                    libraryCardManager.showAllLibraryCard();
                     break;
                 case 5:
                     borrowBooks();
@@ -77,7 +81,8 @@ public class LibraryCardMenu {
 
     //trả sách
     public void giveBookBack() {
-        LibraryCard libraryCard = managerLibraryCard.searchLibraryCardByCodeStudent(inputCode());
+        //thằng librarycard này để hứng thằng đối tượng mà input code tìm dc
+        LibraryCard libraryCard = libraryCardManager.searchLibraryCardByCodeStudent(inputCode());
         if (libraryCard != null) {
             System.out.println("Nhập ngày, tháng, năm trả");
             LocalDate payDay = inputDates();
@@ -85,14 +90,15 @@ public class LibraryCardMenu {
             if (check) {
                 libraryCard.setStatus(true);
                 Book book = managerBook.searchBookByCode(libraryCard.getBook().getBookCode());
+                // tăng đối tượng của book lên 1.
                 book.setQuantity(book.getQuantity() + 1);
                 System.out.println("Trả đúng hạn");
             } else {
                 Book book = managerBook.searchBookByCode(libraryCard.getBook().getBookCode());
                 libraryCard.setStatus(true);
                 book.setQuantity(book.getQuantity() + 1);
-                libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 5);
-                System.out.println("Trả sách quá hạn.Bạn bị phạt thêm 5 đồng!");
+                libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 10);
+                System.out.println("Trả sách quá hạn.Bạn bị phạt thêm 10 đồng!");
             }
         } else {
             System.out.println("Không có sinh viên");
@@ -101,50 +107,54 @@ public class LibraryCardMenu {
         System.out.println(libraryCard.show());
 
         try {
-            managerLibraryCard.getLibraryCardFile().writeFile(managerLibraryCard.getLibraryCardArrayList());
+            libraryCardManager.getLibraryCardFile().writeFile(libraryCardManager.getLibraryCardArrayList());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void borrowBooks() {
-        LibraryCard libraryCard = managerLibraryCard.searchLibraryCardByCodeStudent(inputCode());
+        LibraryCard libraryCard = libraryCardManager.searchLibraryCardByCodeStudent(inputCode());
         if (libraryCard != null) {
-            if (libraryCard.getStudent().getBalance() >= 20) {
-                managerBook.showAllBook();
-                System.out.print("Nhập sách code sách: ");
-                String codeBook = scanner.nextLine();
-                Book book = managerBook.searchBookByCode(codeBook);
-                if (book != null) {
-                    for (int i = 0; i < managerBook.getBookArrayList().size(); i++) {
-                        if (managerBook.getBookArrayList().get(i).equals(book)) {
-                            libraryCard.setBook(managerBook.getBookArrayList().get(i));
-                            book.setQuantity(book.getQuantity() - 1);
+            if (libraryCard.isStatus()) {
+                if (libraryCard.getStudent().getBalance() >= 40) {
+                    managerBook.showAllBook();
+                    System.out.print("Nhập sách code sách: ");
+                    String codeBook = scanner.nextLine();
+                    Book book = managerBook.searchBookByCode(codeBook);
+                    if (book != null) {
+                        for (int i = 0; i < managerBook.getBookArrayList().size(); i++) {
+                            if (managerBook.getBookArrayList().get(i).equals(book)) {
+                                libraryCard.setBook(managerBook.getBookArrayList().get(i));
+                                book.setQuantity(book.getQuantity() - 1);
+                            }
                         }
-                    }
-                    System.out.println("Nhập ngày, tháng, năm mượn: ");
-                    libraryCard.setBorrowedDate(inputDates());
-                    System.out.print("Nhập số ngày cần mượn: ");
-                    int borrowedDays = scanner1.nextInt();
-                    libraryCard.setBorrowedDays(borrowedDays);
-                    libraryCard.setStatus(false);
-                    //nếu mượn lâu thì trừ nhiều tiền
-                    if (borrowedDays <= 7) {
-                        libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 5);
-                    } else if (borrowedDays <= 14) {
-                        libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 10);
-                    } else if (borrowedDays <= 21) {
-                        libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 15);
-                    } else {
-                        libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 20);
-                    }
+                        System.out.println("Nhập ngày, tháng, năm mượn: ");
+                        libraryCard.setBorrowedDate(inputDates());
+                        System.out.print("Nhập số ngày cần mượn: ");
+                        int borrowedDays = scanner1.nextInt();
+                        libraryCard.setBorrowedDays(borrowedDays);
+                        libraryCard.setStatus(false);
+                        //nếu mượn lâu thì trừ nhiều tiền
+                        if (borrowedDays <= 7) {
+                            libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 10);
+                        } else if (borrowedDays <= 14) {
+                            libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 20);
+                        } else if (borrowedDays <= 21) {
+                            libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 25);
+                        } else {
+                            libraryCard.getStudent().setBalance(libraryCard.getStudent().getBalance() - 40);
+                        }
 
-                    System.out.println("Mượn sách thành công");
+                        System.out.println("Mượn sách thành công");
+                    } else {
+                        System.out.println("Không có sách");
+                    }
                 } else {
-                    System.out.println("Không có sách");
+                    System.out.println("Bạn không đủ tiền. Vui lòng nạp tiền để tiếp tục!");
                 }
             } else {
-                System.out.println("Bạn không đủ tiền. Vui lòng nạp tiền để tiếp tục!");
+                System.out.println("Bạn đã mượn sách. Trả sách để tiếp tục");
             }
         } else {
             System.out.println("Không có thẻ thư viện");
@@ -152,7 +162,7 @@ public class LibraryCardMenu {
         System.out.println(libraryCard);
 
         try {
-            managerLibraryCard.getLibraryCardFile().writeFile(managerLibraryCard.getLibraryCardArrayList());
+            libraryCardManager.getLibraryCardFile().writeFile(libraryCardManager.getLibraryCardArrayList());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,7 +170,7 @@ public class LibraryCardMenu {
 
     // tìm kiếm card
     private void searchCard() {
-        LibraryCard libraryCard = managerLibraryCard.searchLibraryCardByCodeStudent(inputCode());
+        LibraryCard libraryCard = libraryCardManager.searchLibraryCardByCodeStudent(inputCode());
         if (libraryCard != null) {
             System.out.println(libraryCard);
         } else {
@@ -170,14 +180,14 @@ public class LibraryCardMenu {
 
 
     //xóa thẻ
-    private void removeLibraryCard(LibraryCardManager managerLibraryCard) {
-        managerLibraryCard.removeLibraryCard(inputCode());
+    private void removeLibraryCard(LibraryCardManager libraryCardManager) {
+        libraryCardManager.removeLibraryCard(inputCode());
     }
 
 
     //tạo card
-    private void addLibraryCard(LibraryCardManager managerLibraryCard) {
-        managerLibraryCard.addLibraryCard(inputCode());
+    private void addLibraryCard(LibraryCard libraryCard) {
+        libraryCardManager.addLibraryCard(inputCode());
     }
 
     //nhập code sinh viên

@@ -1,11 +1,13 @@
 package main;
 
 
-import view.MenuManager;
+import veiw.UserMenu;
 
 public class Main {
     public static void main(String[] args) {
-        MenuManager menuAdminManager = MenuManager.getInstance();
-        menuAdminManager.runMenuAdmin();
+        //goi instance de lay 1 du lieu duy nhat
+        UserMenu userMenu = UserMenu.getInstance();
+        // chay
+        userMenu.runUserMenu();
     }
 }

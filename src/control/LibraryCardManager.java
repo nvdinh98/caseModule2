@@ -3,6 +3,7 @@ package control;
 import model.LibraryCard;
 import model.Student;
 import storage.LibraryCardFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -11,9 +12,6 @@ public class LibraryCardManager {
     ArrayList<LibraryCard> libraryCardArrayList = new ArrayList<>();
     LibraryCardFile libraryCardFile = LibraryCardFile.getInstance();
 
-    private static final StudentManager MANAGER_STUDENT = StudentManager.getInstance();
-
-
     private LibraryCardManager() {
     }
 
@@ -21,9 +19,13 @@ public class LibraryCardManager {
         return LibraryCardManager.ManagerLibraryCardHelper.INSTANCE;
     }
 
-    private static class ManagerLibraryCardHelper{
+    private static final StudentManager MANAGER_STUDENT = StudentManager.getInstance();
+
+
+    private static class ManagerLibraryCardHelper {
         private static final LibraryCardManager INSTANCE = new LibraryCardManager();
     }
+
     public ArrayList<LibraryCard> getLibraryCardArrayList() {
         return libraryCardArrayList;
     }
@@ -103,7 +105,6 @@ public class LibraryCardManager {
         }
         return null;
     }
-
 
 
 }

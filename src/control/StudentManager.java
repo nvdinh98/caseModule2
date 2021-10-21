@@ -32,8 +32,8 @@ public class StudentManager {
         return studentArrayList;
     }
 
-    public void setStudentArrayList(ArrayList<Student> studentArrayList) {
-        this.studentArrayList = studentArrayList;
+    public static void setStudentArrayList(ArrayList<Student> studentArrayList) {
+        studentArrayList = studentArrayList;
     }
 
     ///thêm sinh viên

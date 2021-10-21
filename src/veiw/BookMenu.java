@@ -13,10 +13,10 @@ public class BookMenu {
     }
 
     public static BookMenu getInstance() {
-        return BookMenu.BookMenuWithManagerBookHelper.INSTANCE;
+        return BookMenuHelper.INSTANCE;
     }
 
-    private static class BookMenuWithManagerBookHelper{
+    private static class BookMenuHelper {
         private static final BookMenu INSTANCE = new BookMenu();
     }
     public void runBook(){
@@ -39,6 +39,7 @@ public class BookMenu {
             System.out.println("4. Tìm kiếm theo mã sách");
             System.out.println("5. Dách sách Sách");
             System.out.println("0. Quay lại");
+            System.out.println("----------------図書館--------------");
 
             choice = number.nextInt();
 

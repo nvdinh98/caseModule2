@@ -9,16 +9,17 @@ import java.util.ArrayList;
 public class BookManager {
     ArrayList<Book> bookArrayList = new ArrayList<>();
     BookFile bookFile = BookFile.getInstance();
-    public BookManager() {
-    }
-
-    public static BookManager getInstance() {
-        return BookManager.ManagerBookHelper.INSTANCE;
+    private BookManager() {
     }
 
     private static class ManagerBookHelper{
         private static final BookManager INSTANCE = new BookManager();
     }
+    public static BookManager getInstance() {
+        return BookManager.ManagerBookHelper.INSTANCE;
+    }
+
+
 
 
     public BookManager(ArrayList<Book> bookArrayList) {
@@ -29,8 +30,8 @@ public class BookManager {
         return bookArrayList;
     }
 
-    public void setBookArrayList(ArrayList<Book> bookArrayList) {
-        this.bookArrayList = bookArrayList;
+    public static void setBookArrayList(ArrayList<Book> bookArrayList) {
+        bookArrayList = bookArrayList;
     }
 
     ///thêm sách

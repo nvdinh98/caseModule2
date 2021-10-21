@@ -15,11 +15,11 @@ public class StudentMenu {
         return StudentMenu.StudentMenuWithManagerStudentHelper.INSTANCE;
     }
 
-    private static class StudentMenuWithManagerStudentHelper{
+    private static class StudentMenuWithManagerStudentHelper {
         private static final StudentMenu INSTANCE = new StudentMenu();
     }
 
-    public void runStudent(){
+    public void runStudent() {
         Scanner number = new Scanner(System.in);
         StudentManager managerStudent = StudentManager.getInstance();
         try {
@@ -29,7 +29,7 @@ public class StudentMenu {
         }
         int choice = -1;
 
-        while (choice != 0){
+        while (choice != 0) {
             System.out.println("--------Quản lý sinh viên--------");
             System.out.println("1. Thêm sinh viên");
             System.out.println("2. Sửa thông tin sinh viên");
@@ -37,10 +37,11 @@ public class StudentMenu {
             System.out.println("4. Tìm kiếm theo mã sinh viên");
             System.out.println("5. Dách sách sinh viên");
             System.out.println("0. Quay lại");
+            System.out.println("----------------図書館--------------");
 
             choice = number.nextInt();
 
-            switch (choice){
+            switch (choice) {
                 case 1:
                     inputStudent(managerStudent);
                     break;
@@ -79,25 +80,21 @@ public class StudentMenu {
 
     }
 
+    // them sinh vien.da fix.
     public static Student addStudent() {
         Scanner string = new Scanner(System.in);
         Scanner sc = new Scanner(System.in);
-        String nameStudent;
-        String yearOfBirth;
-        String codeStudent;
-        String class1;
-        double balance;
         System.out.print("Nhập tên sinh viên: ");
-        nameStudent = string.nextLine();
+        String nameStudent = string.nextLine();
         System.out.print("Nhập mã sinh viên: ");
-        codeStudent = string.nextLine();
+        String codeStudent = string.nextLine();
         System.out.print("Nhập năm sinh: ");
-        yearOfBirth = string.nextLine();
+        String yearOfBirth = string.nextLine();
         System.out.print("Nhập tên lớp: ");
-        class1 = string.nextLine();
+        String class1 = string.nextLine();
         System.out.print("Nhập số tiền hiện có: ");
-        balance = sc.nextDouble();
-        return new Student(nameStudent,codeStudent,yearOfBirth,class1,balance);
+        double balance = sc.nextDouble();
+        return new Student(nameStudent, codeStudent, yearOfBirth, class1, balance);
     }
 
     //nhập code sinh viên
