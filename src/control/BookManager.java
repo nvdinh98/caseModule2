@@ -44,7 +44,6 @@ public class BookManager {
         }
     }
 
-
     //sửa thông tin sách theo code
     public void editStudent (String code, Book newBook) {
         Book book = searchBookByCode(code);
@@ -100,7 +99,5 @@ public class BookManager {
         }
         return null;
     }
-
-
 
 }

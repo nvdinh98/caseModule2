@@ -99,7 +99,6 @@ public class UserMenu {
         System.out.println("Nhập mật khẩu");
         String passWord = String.next();
         return new User(userName, passWord, "student");
-
     }
 
 }

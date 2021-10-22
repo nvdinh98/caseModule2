@@ -10,7 +10,7 @@ import storage.StudentFile;
 import java.io.IOException;
 import java.util.Scanner;
 
- public class StudentManagerMenu {
+public class StudentManagerMenu {
     public StudentManagerMenu() {
     }
 
@@ -18,7 +18,7 @@ import java.util.Scanner;
         return StudentManagerMenu.MenuManagerStudentHelper.INSTANCE;
     }
 
-    private static class MenuManagerStudentHelper{
+    private static class MenuManagerStudentHelper {
         private static final StudentManagerMenu INSTANCE = new StudentManagerMenu();
 
     }
@@ -51,7 +51,7 @@ import java.util.Scanner;
 
         int choice = -1;
 
-        while (choice != 0){
+        while (choice != 0) {
             System.out.println("--------Trang trủ--------");
             System.out.println("1. Mượn Sách");
             System.out.println("2. Trả sách");
@@ -59,7 +59,7 @@ import java.util.Scanner;
             System.out.println("0. Quay lại");
 
             choice = number.nextInt();
-            switch (choice){
+            switch (choice) {
                 case 1:
                     libraryCardMenu.borrowBooks();
                     break;

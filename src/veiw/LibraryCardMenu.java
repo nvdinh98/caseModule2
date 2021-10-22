@@ -43,13 +43,13 @@ public class LibraryCardMenu {
 
         while (choice != 0) {
             System.out.println("--------Quản lý thẻ thư viện--------");
-            System.out.println("1. Thêm thẻ thư viện");
-            System.out.println("2. Xóa thẻ thử viện");
-            System.out.println("3. Tìm kiếm thẻ thư viện theo mã sinh viên");
-            System.out.println("4. Danh sách thẻ thư viện");
-            System.out.println("5. Mượn sách");
-            System.out.println("6. Trả sách");
-            System.out.println("0. Quay lại");
+            System.out.println("1.Danh sách thẻ thư viện");
+            System.out.println("2.Xóa thẻ thử viện");
+            System.out.println("3.Tìm kiếm thẻ thư viện theo mã sinh viên");
+            System.out.println("4.Thêm thẻ thư viện");
+            System.out.println("5.Mượn sách");
+            System.out.println("6.Trả sách");
+            System.out.println("0.Quay lại");
             System.out.println("----------------図書館--------------");
 
 
@@ -57,8 +57,9 @@ public class LibraryCardMenu {
 
             switch (choice) {
                 case 1:
-                    libraryCardManager.addLibraryCard(inputCode());
+                    libraryCardManager.showAllLibraryCard();
                     break;
+
                 case 2:
                     removeLibraryCard(libraryCardManager);
                     break;
@@ -66,7 +67,7 @@ public class LibraryCardMenu {
                     searchCard();
                     break;
                 case 4:
-                    libraryCardManager.showAllLibraryCard();
+                    libraryCardManager.addLibraryCard(inputCode());
                     break;
                 case 5:
                     borrowBooks();

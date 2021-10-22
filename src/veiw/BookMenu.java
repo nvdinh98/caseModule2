@@ -19,45 +19,46 @@ public class BookMenu {
     private static class BookMenuHelper {
         private static final BookMenu INSTANCE = new BookMenu();
     }
-    public void runBook(){
+
+    public void runBook() {
         Scanner number = new Scanner(System.in);
-        BookManager managerBook = BookManager.getInstance();
+        BookManager bookManager = BookManager.getInstance();
 
         try {
-            managerBook.setBookArrayList(BookFile.getInstance().readFile());
+            bookManager.setBookArrayList(BookFile.getInstance().readFile());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         int choice = -1;
 
-        while (choice != 0){
+        while (choice != 0) {
             System.out.println("--------Quản lý sách thư viện--------");
-            System.out.println("1. Thêm sách");
-            System.out.println("2. Sửa thông tin sách");
-            System.out.println("3. Xóa sách");
-            System.out.println("4. Tìm kiếm theo mã sách");
-            System.out.println("5. Dách sách Sách");
+            System.out.println("1.Hiển thị Danh sách");
+            System.out.println("2.Sửa thông tin sách");
+            System.out.println("3.Xóa sách");
+            System.out.println("4.Tìm kiếm theo mã sách");
+            System.out.println("5.Thêm Sách");
             System.out.println("0. Quay lại");
             System.out.println("----------------図書館--------------");
 
             choice = number.nextInt();
 
-            switch (choice){
+            switch (choice) {
                 case 1:
-                    inputBook(managerBook);
+                    bookManager.showAllBook();
                     break;
                 case 2:
-                    editBookByCode(managerBook);
+                    editBookByCode(bookManager);
                     break;
                 case 3:
-                    removeBookByCode(managerBook);
+                    removeBookByCode(bookManager);
                     break;
                 case 4:
-                    System.out.println(managerBook.searchBookByCode(inputCode()));
+                    System.out.println(bookManager.searchBookByCode(inputCode()));
                     break;
                 case 5:
-                    managerBook.showAllBook();
+                    inputBook(bookManager);
                     break;
                 case 0:
             }
@@ -72,7 +73,7 @@ public class BookMenu {
 
     //sửa sách theo code
     private void editBookByCode(BookManager managerBook) {
-        managerBook.editStudent(inputCode(),addBook());
+        managerBook.editStudent(inputCode(), addBook());
     }
 
     //thêm sách
@@ -91,7 +92,7 @@ public class BookMenu {
         bookName = string.nextLine();
         System.out.print("Nhập số lượng sách: ");
         quantity = inputNumber.nextInt();
-        return new Book(bookCode, bookName,quantity);
+        return new Book(bookCode, bookName, quantity);
     }
 
     //nhập code sách
